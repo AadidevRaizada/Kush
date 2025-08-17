@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Spline from '@splinetool/react-spline';
 import GradientText from './GradientText';
 import RotatingText from './RotatingText';
 import ProfileCard from './ProfileCard';
+import SplineLoadingPlaceholder from './SplineLoadingPlaceholder';
 import './space-theme.css';
 
 // REPLACE WITH YOUR GOOGLE FORM URL
@@ -40,6 +41,21 @@ export default function Home() {
   const [viewState, setViewState] = useState('spline');
   const [selectedPlanet, setSelectedPlanet] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [splineLoading, setSplineLoading] = useState(true);
+
+  // Spline loading handlers
+  const handleSplineLoad = () => {
+    setSplineLoading(false);
+  };
+
+  // Fallback timeout in case onLoad doesn't fire
+  useEffect(() => {
+    const fallbackTimer = setTimeout(() => {
+      setSplineLoading(false);
+    }, 3000); // 3 second fallback
+
+    return () => clearTimeout(fallbackTimer);
+  }, []);
 
   const handlePlanetClick = (planetName) => {
     console.log('planetClick:', planetName);
@@ -78,19 +94,30 @@ export default function Home() {
         className={`spline-view ${viewState !== 'spline' ? 'hidden' : ''}`}
         onClick={handleGlobalClick}
       >
-        <Spline 
-          scene="https://prod.spline.design/Anw0YQXiyB8JZ7KX/scene.splinecode"
-          onPointerUp={(e) => {
-            e.stopPropagation();
-            if (e.target && e.target.name) {
-              handlePlanetClick(e.target.name);
-            } else {
-              handleGlobalClick();
-            }
-          }}
-        />
+        {/* Loading placeholder */}
+        {splineLoading && (
+          <div className={`spline-loading-overlay ${!splineLoading ? 'spline-loading-fade-out' : ''}`}>
+            <SplineLoadingPlaceholder />
+          </div>
+        )}
         
-        <div className="spline-prompt">
+        {/* Spline Scene */}
+        <div className={`spline-scene ${splineLoading ? 'spline-scene-hidden' : ''}`}>
+          <Spline 
+            scene="https://prod.spline.design/Anw0YQXiyB8JZ7KX/scene.splinecode"
+            onLoad={handleSplineLoad}
+            onPointerUp={(e) => {
+              e.stopPropagation();
+              if (e.target && e.target.name) {
+                handlePlanetClick(e.target.name);
+              } else {
+                handleGlobalClick();
+              }
+            }}
+          />
+        </div>
+        
+        <div className={`spline-prompt ${splineLoading ? 'spline-prompt-hidden' : ''}`}>
           Click anywhere to explore events.
         </div>
       </div>
