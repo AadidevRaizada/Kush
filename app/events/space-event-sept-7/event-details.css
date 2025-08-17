@@ -162,6 +162,14 @@
   font-weight: 500;
 }
 
+.event-photo {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
 .host-info {
   background: var(--panel);
   border: 1px solid var(--stroke);

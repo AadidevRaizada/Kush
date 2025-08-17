@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import './event-details.css';
 
 // REPLACE WITH YOUR GOOGLE FORM URL
@@ -60,10 +61,14 @@ export default function SpaceEventDetails() {
           {/* Left Column - Photo & Host */}
           <div className="left-column">
             <div className="event-photo-container">
-              <div className="event-photo-placeholder">
-                <span>🌙</span>
-                <p>Event Photo</p>
-              </div>
+              <Image
+                src="/SEP-7-EVENT.png"
+                alt="Total Lunar Eclipse - September 7, 2025"
+                width={400}
+                height={500}
+                className="event-photo"
+                priority
+              />
             </div>
             
             <div className="host-info">
@@ -134,10 +139,7 @@ export default function SpaceEventDetails() {
             <section className="event-section">
               <h3 className="subsection-heading">Registration (Now Open!)</h3>
               <ol className="registration-steps">
-                <li>DM us to register.</li>
-                <li>You will receive a payment link.</li>
-                <li>After payment, we'll share a Google Form for your details.</li>
-                <li>Once completed, you'll receive your Registration ID for entry.</li>
+                <li>Once registration completed, you'll receive your Registration ID for entry.</li>
               </ol>
             </section>
           </div>
